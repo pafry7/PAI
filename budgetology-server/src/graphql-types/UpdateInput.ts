@@ -1,6 +1,8 @@
 import { Field, InputType } from "type-graphql";
 import { IsEmail, Length } from "class-validator";
 
+// it can be simplified for sure - based on register input somehow
+
 @InputType()
 export class UpdateInput {
   @Field()
