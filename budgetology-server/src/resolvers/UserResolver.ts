@@ -1,25 +1,17 @@
-import { Query, Resolver, Mutation, Arg } from "type-graphql";
+import { Query, Resolver, Mutation, Arg, UseMiddleware } from "type-graphql";
 import { User } from "entity/User";
-import bcrypt from "bcryptjs";
-import { RegisterInput } from "graphql-types/user/RegisterInput";
-import { UpdateInput } from "graphql-types/user/UpdateInput";
-
+import { UpdateInput } from "graphql-types/UpdateInput";
+import { isAuth } from "middleware/isAuth";
 @Resolver()
 export class UserResolver {
   @Query(() => [User])
+  @UseMiddleware(isAuth)
   users(): Promise<User[]> {
     return User.find();
   }
 
-  @Mutation(() => User)
-  async createUser(
-    @Arg("data") { email, password }: RegisterInput
-  ): Promise<User> {
-    const hashedPassword = await bcrypt.hash(password, 12);
-    return await User.create({ email, password: hashedPassword }).save();
-  }
-
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async updateUser(
     @Arg("id") id: string,
     @Arg("data", () => UpdateInput) data: UpdateInput
@@ -29,6 +21,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async deleteUser(@Arg("id") id: string): Promise<Boolean> {
     await User.delete({ id });
     return true;
