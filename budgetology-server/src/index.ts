@@ -4,6 +4,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import express from "express";
+import { resolvers } from "resolvers";
 import session from "express-session";
 
 const connectSqlite3 = require("connect-sqlite3");
@@ -35,7 +36,7 @@ const SQLiteStore = connectSqlite3(session);
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [__dirname + "/resolvers/**/*.ts"],
+      resolvers: resolvers,
       validate: true,
       emitSchemaFile: true
     }),
