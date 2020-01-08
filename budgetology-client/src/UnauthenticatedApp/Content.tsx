@@ -53,7 +53,7 @@ export const Content = () => {
           Get started
         </Button>
       </div>
-      <img src={image}></img>
+      <img src={image} alt="Man sitting next to a piggybank"></img>
       <AuthDialog handleClose={handleClose} open={open} text={dialogText} />
     </div>
   );

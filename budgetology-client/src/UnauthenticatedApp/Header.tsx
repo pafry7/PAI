@@ -1,4 +1,4 @@
-import { Button, Link, makeStyles } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
 import { AuthDialog } from "UnauthenticatedApp/AuthDialog";
@@ -40,9 +40,11 @@ export const Header = () => {
 
   return (
     <>
-      <div className={classes.header}>
-        <div className={classes.logo}>Budgetology</div>
-        <div className={classes.nav}>
+      <div aria-label="Header" className={classes.header}>
+        <div aria-label="Logo name" className={classes.logo}>
+          Budgetology
+        </div>
+        <div aria-label="Login and Signup buttons" className={classes.nav}>
           <Button onClick={() => handleOpen("Login")}>Login </Button>
           <Button color="primary" onClick={() => handleOpen("Sign up")}>
             Sign up
