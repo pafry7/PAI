@@ -1,6 +1,7 @@
-import { Link, makeStyles } from "@material-ui/core";
+import { Button, Link, makeStyles } from "@material-ui/core";
+import React, { useState } from "react";
 
-import React from "react";
+import { AuthDialog } from "UnauthenticatedApp/AuthDialog";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -26,15 +27,29 @@ const useStyles = makeStyles(theme => ({
 
 export const Header = () => {
   const classes = useStyles();
+  const [dialogText, setDialogText] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = (text: string) => {
+    setDialogText(text);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <div className={classes.header}>
-      <div className={classes.logo}>Budgetology</div>
-      <div className={classes.nav}>
-        <Link color="textPrimary" href="#">
-          Login
-        </Link>
-        <Link href="#">Sign up</Link>
+    <>
+      <div className={classes.header}>
+        <div className={classes.logo}>Budgetology</div>
+        <div className={classes.nav}>
+          <Button onClick={() => handleOpen("Login")}>Login </Button>
+          <Button color="primary" onClick={() => handleOpen("Sign up")}>
+            Sign up
+          </Button>
+        </div>
       </div>
-    </div>
+      <AuthDialog handleClose={handleClose} open={open} text={dialogText} />
+    </>
   );
 };

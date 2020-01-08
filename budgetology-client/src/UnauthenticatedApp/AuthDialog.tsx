@@ -1,30 +1,74 @@
 import {
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
-  Typography
+  TextField,
+  Typography,
+  makeStyles
 } from "@material-ui/core";
-import React, { useState } from "react";
 
-export const AuthDialog = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+import React from "react";
 
+const useStyles = makeStyles(theme => ({
+  dialogText: {
+    color: theme.palette.common.black
+  }
+}));
+interface AuthDialogProps {
+  handleClose: () => void;
+  open: boolean;
+  text: string;
+}
+
+export const AuthDialog = ({ handleClose, open, text }: AuthDialogProps) => {
+  const classes = useStyles();
   return (
-    <>
-      <Dialog onClose={handleClose} aria-labelledby="test" open={open}>
-        {/* <DialogTitle id="test" onClose={handleClose}>
-          xD elo
-        </DialogTitle> */}
+    <div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby={`form-dialog-title-${text}`}
+      >
+        <DialogTitle
+          id={`form-dialog-title-${text}`}
+          className={classes.dialogText}
+        >
+          {text}
+        </DialogTitle>
         <DialogContent>
-          <Typography>xD</Typography>
+          <TextField
+            autoFocus
+            margin="dense"
+            InputProps={{ classes: { root: classes.dialogText } }}
+            id="email-field"
+            required
+            variant="outlined"
+            label="Email Address"
+            type="email"
+            fullWidth
+          />
+          <TextField
+            required
+            variant="outlined"
+            margin="dense"
+            id="password-field"
+            InputProps={{ classes: { root: classes.dialogText } }}
+            type="password"
+            label="Password"
+            fullWidth
+          />
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} variant="contained" color="primary">
+            {text}
+          </Button>
+        </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };

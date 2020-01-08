@@ -1,6 +1,7 @@
 import { Button, Typography, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
+import { AuthDialog } from "UnauthenticatedApp/AuthDialog";
 import image from "UnauthenticatedApp/image.svg";
 
 const useStyles = makeStyles(theme => ({
@@ -21,6 +22,17 @@ const useStyles = makeStyles(theme => ({
 //typography da sie lepiej ogarnac zmieniajac theme
 export const Content = () => {
   const classes = useStyles();
+  const [dialogText, setDialogText] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setDialogText("Sign up");
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.info}>
@@ -36,11 +48,13 @@ export const Content = () => {
           size="large"
           variant="contained"
           color="primary"
+          onClick={handleOpen}
         >
           Get started
         </Button>
       </div>
       <img src={image}></img>
+      <AuthDialog handleClose={handleClose} open={open} text={dialogText} />
     </div>
   );
 };
