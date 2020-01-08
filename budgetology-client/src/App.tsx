@@ -1,7 +1,20 @@
-import React from "react";
+import { Button, CssBaseline } from "@material-ui/core";
+import React, { useState } from "react";
+
+import { AuthenticatedApp } from "AuthenticatedApp";
+import { ThemeProvider } from "@material-ui/styles";
+import { UnauthenticatedApp } from "UnauthenticatedApp";
+import { theme } from "common/theme";
 
 const App: React.FC = () => {
-  return <h1>{`Budgetology incoming \u{1F4B0}`}</h1>;
+  const [user, setUser] = useState(true);
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {/* {user ? <AuthenticatedApp /> : <UnauthenticatedApp />} */}
+      <UnauthenticatedApp />
+    </ThemeProvider>
+  );
 };
 
 export default App;
