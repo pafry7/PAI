@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   },
   info: { width: "40%" },
   button: { marginTop: "3.5rem", height: "50px", width: "150px" },
-  image: { width: "80%", height: "auto", maxWidth: "550px" }
+  image: { width: "80%", height: "auto", maxWidth: "850px" }
 }));
 //typography da sie lepiej ogarnac zmieniajac theme
 export const Content = () => {
@@ -53,7 +53,11 @@ export const Content = () => {
           Get started
         </Button>
       </div>
-      <img src={image} alt="Man sitting next to a piggybank"></img>
+      <img
+        className={classes.image}
+        src={image}
+        alt="Man sitting next to a piggybank"
+      ></img>
       <AuthDialog handleClose={handleClose} open={open} text={dialogText} />
     </div>
   );
