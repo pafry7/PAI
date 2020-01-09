@@ -1,3 +1,4 @@
+import { AuthProvider } from "common/AuthContent";
 import { CssBaseline } from "@material-ui/core";
 import React from "react";
 // import { AuthenticatedApp } from "AuthenticatedApp";
@@ -9,9 +10,11 @@ const App: React.FC = () => {
   // const [user, setUser] = useState(true);
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {/* {user ? <AuthenticatedApp /> : <UnauthenticatedApp />} */}
-      <UnauthenticatedApp />
+      <AuthProvider>
+        <CssBaseline />
+        {/* {user ? <AuthenticatedApp /> : <UnauthenticatedApp />} */}
+        <UnauthenticatedApp />
+      </AuthProvider>
     </ThemeProvider>
   );
 };
