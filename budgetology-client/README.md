@@ -4,19 +4,7 @@ Made with Typescript, React, Apollo Server
 
 ## Installation
 
-1. Clone project
-
-```
-git clone https://github.com/x
-```
-
-2. cd into folder
-
-```
-cd x
-```
-
-3. Download dependencies
+1. Install dependencies
 
 ```
 yarn

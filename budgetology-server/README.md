@@ -1,22 +1,10 @@
 # budgetology-server
 
-A GraphQL Server made with Typescript, Sqlite, Koa, Apollo Server
+A GraphQL Server made with Typescript, Sqlite, Express, Apollo Server
 
 ## Installation
 
-1. Clone project
-
-```
-git clone https://github.com/x
-```
-
-2. cd into folder
-
-```
-cd x
-```
-
-3. Download dependencies
+3. Install dependencies
 
 ```
 yarn
