@@ -4,15 +4,18 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   makeStyles
 } from "@material-ui/core";
 
+import { AuthForm } from "UnauthenticatedApp/Form/AuthForm";
 import React from "react";
 
 const useStyles = makeStyles(theme => ({
   dialogText: {
     color: theme.palette.common.black
+  },
+  dialogWidth: {
+    width: "20%"
   }
 }));
 interface AuthDialogProps {
@@ -23,9 +26,18 @@ interface AuthDialogProps {
 
 export const AuthDialog = ({ handleClose, open, text }: AuthDialogProps) => {
   const classes = useStyles();
+
+  const formId = "auth-form";
+  const handleSubmit = () => {
+    document
+      .getElementById(formId)!
+      .dispatchEvent(new Event("submit", { cancelable: true }));
+  };
+
   return (
     <div>
       <Dialog
+        PaperProps={{ classes: { root: classes.dialogWidth } }}
         open={open}
         onClose={handleClose}
         aria-labelledby={`form-dialog-title-${text}`}
@@ -37,33 +49,18 @@ export const AuthDialog = ({ handleClose, open, text }: AuthDialogProps) => {
           {text}
         </DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            InputProps={{ classes: { root: classes.dialogText } }}
-            id="email-field"
-            required
-            variant="outlined"
-            label="Email Address"
-            type="email"
-            fullWidth
-          />
-          <TextField
-            required
-            variant="outlined"
-            margin="dense"
-            id="password-field"
-            InputProps={{ classes: { root: classes.dialogText } }}
-            type="password"
-            label="Password"
-            fullWidth
-          />
+          <AuthForm text={text} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} variant="contained" color="primary">
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            type="submit"
+            color="primary"
+          >
             {text}
           </Button>
         </DialogActions>

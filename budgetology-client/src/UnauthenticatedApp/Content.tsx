@@ -1,7 +1,7 @@
 import { Button, Typography, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
-import { AuthDialog } from "UnauthenticatedApp/AuthDialog";
+import { AuthDialog } from "UnauthenticatedApp/Form/AuthDialog";
 import image from "UnauthenticatedApp/image.svg";
 
 const useStyles = makeStyles(theme => ({

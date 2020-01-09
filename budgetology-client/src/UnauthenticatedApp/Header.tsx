@@ -1,7 +1,7 @@
 import { Button, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
-import { AuthDialog } from "UnauthenticatedApp/AuthDialog";
+import { AuthDialog } from "UnauthenticatedApp/Form/AuthDialog";
 
 const useStyles = makeStyles(theme => ({
   header: {
