@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
+import cors from "cors";
 import { createConnection } from "typeorm";
 import express from "express";
 import { resolvers } from "resolvers";
@@ -13,7 +14,12 @@ const SQLiteStore = connectSqlite3(session);
 
 (async () => {
   const app = express();
-
+  app.use(
+    cors({
+      credentials: true,
+      origin: "http://localhost:3000"
+    })
+  );
   app.use(
     session({
       store: new SQLiteStore({
@@ -43,7 +49,7 @@ const SQLiteStore = connectSqlite3(session);
     context: ({ req, res }) => ({ req, res })
   });
 
-  apolloServer.applyMiddleware({ app, cors: false });
+  apolloServer.applyMiddleware({ app });
   const port = 4000;
   app.listen(port, () => {
     console.log(`server started at http://localhost:${port}/graphql`);
