@@ -31,7 +31,7 @@ const SQLiteStore = connectSqlite3(session);
       resave: false,
       saveUninitialized: false,
       cookie: {
-        httpOnly: true,
+        httpOnly: false,
         secure: process.env.NODE_ENV === "production",
         maxAge: 1000 * 60 * 60 * 24 * 7 * 365 // 7 years
       }
@@ -49,7 +49,7 @@ const SQLiteStore = connectSqlite3(session);
     context: ({ req, res }) => ({ req, res })
   });
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
   const port = 4000;
   app.listen(port, () => {
     console.log(`server started at http://localhost:${port}/graphql`);
