@@ -1,13 +1,33 @@
 import React, { useContext, useState } from "react";
 
+import { MeComponent } from "generated/apolloComponents";
+import { meQuery } from "graphql/me";
+import { useQuery } from "@apollo/react-hooks";
+
 const AuthContext = React.createContext({});
 
-export const AuthProvider = (props: any) => {
-  const [user] = useState(null);
-  const [authenticated] = useState(false);
+const AuthProvider = (props: any) => {
+  const [user, setUser]: any = useState(null);
+  const [authenticated, setAuthenticated] = useState(false);
+  const { loading, error, data } = useQuery(meQuery);
 
-  const login = () => console.log("login");
-  const logout = () => console.log("logout");
+  const login = () => {
+    if (document.cookie) {
+      setAuthenticated(true);
+    } else {
+      console.log("nie ma cookie");
+    }
+  };
+  const me = () => {
+    if (loading) return null;
+    if (error) return null;
+    return data.me.id;
+  };
+
+  const logout = () => {
+    setAuthenticated(false);
+    setUser(null);
+  };
   const register = () => console.log("register");
 
   return (
@@ -15,8 +35,10 @@ export const AuthProvider = (props: any) => {
       value={{
         user,
         authenticated,
+        data,
         login,
         logout,
+        me,
         register
       }}
       {...props}
@@ -24,10 +46,12 @@ export const AuthProvider = (props: any) => {
   );
 };
 
-export const useAuth = () => {
+const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error(`useAuth must be used within a AuthProvider`);
   }
   return context;
 };
+
+export { useAuth, AuthProvider };

@@ -5,15 +5,18 @@ import { InMemoryCache, NormalizedCacheObject } from "apollo-cache-inmemory";
 import { ApolloClient } from "apollo-client";
 import { ApolloProvider } from "@apollo/react-hooks";
 import App from "./App";
+import { AuthProvider } from "common/AuthContent";
+import { CssBaseline } from "@material-ui/core";
 import { HttpLink } from "apollo-link-http";
 import React from "react";
 import ReactDOM from "react-dom";
-import gql from "graphql-tag";
+import { ThemeProvider } from "@material-ui/styles";
+import { theme } from "common/theme";
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: "http://localhost:4000/graphql"
-  // credentials: "include"
+  uri: "http://localhost:4000/graphql",
+  credentials: "include"
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -21,22 +24,14 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link
 });
 
-client
-  .query({
-    query: gql`
-      query {
-        users {
-          id
-          email
-          name
-        }
-      }
-    `
-  })
-  .then(result => console.log(JSON.stringify(result, null, 2)));
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <CssBaseline />
+        <App />
+      </AuthProvider>
+    </ThemeProvider>
   </ApolloProvider>,
   document.getElementById("root")
 );
