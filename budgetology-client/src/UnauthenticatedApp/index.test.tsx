@@ -46,7 +46,7 @@ describe("UnauthenticatedApp", () => {
     expect(findByLabelText("form-dialog-title-Sign up"));
 
     // Press esc to close the dialog
-    fireEvent.keyDown(getByText(/Password/i), {
+    fireEvent.keyDown(getByText(/Cancel/i), {
       key: "Escape",
       code: "Escape",
       keyCode: 27,
