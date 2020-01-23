@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import { AuthenticatedApp } from "AuthenticatedApp";
+import { LogoutComponent } from "generated/apolloComponents";
 import { UnauthenticatedApp } from "UnauthenticatedApp";
 import { useAuth } from "common/AuthContent";
 

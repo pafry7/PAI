@@ -1,12 +1,17 @@
 import { Field, Form, Formik } from "formik";
 import { LinearProgress, makeStyles } from "@material-ui/core";
 import {
+  useLoginMutation,
+  useRegisterMutation
+} from "generated/apolloComponents";
+import {
   validateLogin,
   validateSignup
 } from "UnauthenticatedApp/Form/validations";
 
 import React from "react";
 import { TextField } from "formik-material-ui";
+import { useAuth } from "common/AuthContent";
 
 const useStyles = makeStyles(theme => ({
   dialogText: {
@@ -20,6 +25,9 @@ interface AuthFormProps {
 
 export const AuthForm = ({ text }: AuthFormProps) => {
   const classes = useStyles();
+  const { login }: any = useAuth();
+  const [loginMutation] = useLoginMutation();
+  const [registerMutation] = useRegisterMutation();
 
   return (
     <Formik
@@ -34,17 +42,51 @@ export const AuthForm = ({ text }: AuthFormProps) => {
           : { email: "", password: "" }
       }
       validate={text === "Sign up" ? validateSignup : validateLogin}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          setSubmitting(false);
-          alert(
-            JSON.stringify(
-              { email: values.email, password: values.password },
-              null,
-              2
-            )
-          );
-        }, 500);
+      onSubmit={(values, { setSubmitting, setErrors }) => {
+        setSubmitting(true);
+        text === "Login"
+          ? loginMutation({
+              variables: {
+                input: { ...values }
+              }
+            })
+              .then(response => {
+                if (
+                  response &&
+                  response.data &&
+                  response.data.login &&
+                  response.data.login.user &&
+                  response.data.login.user.id
+                ) {
+                  login();
+                }
+              })
+              .catch(err => {
+                setErrors({ password: "Bad input" });
+                console.log(err.graphQLErrors);
+              })
+              .finally(() => setSubmitting(false))
+          : registerMutation({
+              variables: {
+                input: { email: values.email, password: values.password }
+              }
+            })
+              .then(response => {
+                if (
+                  response &&
+                  response.data &&
+                  response.data.register &&
+                  response.data.register.user &&
+                  response.data.register.user.id
+                ) {
+                  login();
+                }
+              })
+              .catch(err => {
+                setErrors({ confirmPassword: "Bad input" });
+                console.log(err);
+              })
+              .finally(() => setSubmitting(false));
       }}
     >
       {({ isSubmitting }) => (
