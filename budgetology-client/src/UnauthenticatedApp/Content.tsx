@@ -2,7 +2,9 @@ import { Button, Typography, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
 import { AuthDialog } from "UnauthenticatedApp/Form/AuthDialog";
+import { LoginComponent } from "generated/apolloComponents";
 import image from "UnauthenticatedApp/image.svg";
+import { useAuth } from "common/AuthContent";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,6 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 //typography da sie lepiej ogarnac zmieniajac theme
 export const Content = () => {
+  const testAUth: any = useAuth();
   const classes = useStyles();
   const [dialogText, setDialogText] = useState("");
   const [open, setOpen] = useState(false);
@@ -59,6 +62,32 @@ export const Content = () => {
         alt="Man sitting next to a piggybank"
       ></img>
       <AuthDialog handleClose={handleClose} open={open} text={dialogText} />
+      <LoginComponent>
+        {mutate => (
+          <button
+            onClick={async () => {
+              const response = await mutate({
+                variables: {
+                  input: { email: "xD@xD.pl", password: "xD@xD.pl" }
+                }
+              });
+
+              // console.log(response);
+              if (
+                response &&
+                response.data &&
+                response.data.login &&
+                response.data.login.user &&
+                response.data.login.user.id
+              ) {
+                testAUth.login();
+              }
+            }}
+          >
+            call login mutation
+          </button>
+        )}
+      </LoginComponent>
     </div>
   );
 };

@@ -46,7 +46,8 @@ export const AuthForm = ({ text }: AuthFormProps) => {
           );
         }, 500);
       }}
-      render={({ isSubmitting }) => (
+    >
+      {({ isSubmitting }) => (
         <Form id="auth-form">
           <Field
             name="email"
@@ -110,6 +111,6 @@ export const AuthForm = ({ text }: AuthFormProps) => {
           <br />
         </Form>
       )}
-    />
+    </Formik>
   );
 };
