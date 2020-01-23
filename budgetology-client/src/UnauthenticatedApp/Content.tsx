@@ -72,6 +72,7 @@ export const Content = () => {
                 }
               });
 
+              testAUth.login();
               // console.log(response);
               if (
                 response &&
