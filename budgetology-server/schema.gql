@@ -8,15 +8,48 @@ input AuthInput {
   password: String!
 }
 
+type BankAccount {
+  id: ID!
+  bankName: String!
+  moneyAmount: Float!
+  expenses: [Expense!]
+}
+
+input BankAccountInput {
+  bankName: String!
+  moneyAmount: Float!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type Expense {
+  id: ID!
+  amount: Float!
+  description: String!
+  date: DateTime
+}
+
 type FieldError {
   path: String!
   message: String!
+}
+
+type Income {
+  id: ID!
+  amount: Float!
+  description: String!
+  date: DateTime
 }
 
 type Mutation {
   register(input: AuthInput!): UserResponse!
   login(input: AuthInput!): UserResponse!
   logout: Boolean!
+  addBankAccount(data: BankAccountInput!, id: String!): Boolean!
+  addExpense(description: String!, amount: Float!, id: String!): Boolean!
   updateUser(data: UpdateInput!, id: String!): Boolean!
   deleteUser(id: String!): Boolean!
 }
@@ -24,18 +57,23 @@ type Mutation {
 type Query {
   me: User
   users: [User!]!
+  user(id: String!): User!
 }
 
 input UpdateInput {
   email: String!
   password: String!
   name: String!
+  cash: Float!
 }
 
 type User {
   id: ID!
   email: String!
   name: String
+  cash: Float
+  budget: Float!
+  bankAccounts: [BankAccount!]
 }
 
 type UserResponse {
