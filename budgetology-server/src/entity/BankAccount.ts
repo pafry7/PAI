@@ -9,7 +9,7 @@ import {
 import { Field, ID, ObjectType } from "type-graphql";
 
 import { Expense } from "entity/Expense";
-// import { Income } from "entity/Income";
+import { Income } from "entity/Income";
 import { User } from "entity/User";
 
 @ObjectType()
@@ -41,11 +41,11 @@ export class BankAccount extends BaseEntity {
   )
   expenses: Expense[];
 
-  // @Field(() => Income, { nullable: true })
-  // @OneToMany(
-  //   () => Income,
-  //   income => income.bankAccount,
-  //   { nullable: true }
-  // )
-  // incomes: Income[];
+  @Field(() => Income, { nullable: true })
+  @OneToMany(
+    () => Income,
+    income => income.bankAccount,
+    { nullable: true }
+  )
+  incomes: Income[];
 }

@@ -13,6 +13,7 @@ type BankAccount {
   bankName: String!
   moneyAmount: Float!
   expenses: [Expense!]
+  incomes: [Income!]
 }
 
 input BankAccountInput {
@@ -50,6 +51,7 @@ type Mutation {
   logout: Boolean!
   addBankAccount(data: BankAccountInput!, id: String!): Boolean!
   addExpense(description: String!, amount: Float!, id: String!): Boolean!
+  addIncome(description: String!, amount: Float!, id: String!): Boolean!
   updateUser(data: UpdateInput!, id: String!): Boolean!
   deleteUser(id: String!): Boolean!
 }
@@ -57,6 +59,7 @@ type Mutation {
 type Query {
   me: User
   expenses(id: String!): [Expense!]!
+  incomes(id: String!): [Income!]!
   bankAccount(id: String!): BankAccount!
   bankAccounts(id: String!): [BankAccount!]!
   users: [User!]!

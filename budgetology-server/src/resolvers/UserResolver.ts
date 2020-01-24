@@ -7,13 +7,23 @@ export class UserResolver {
   @Query(() => [User])
   // @UseMiddleware(isAuth)
   users(): Promise<User[]> {
-    return User.find({ relations: ["bankAccounts", "bankAccounts.expenses"] });
+    return User.find({
+      relations: [
+        "bankAccounts",
+        "bankAccounts.expenses",
+        "bankAccounts.incomes"
+      ]
+    });
   }
 
   @Query(() => User)
   async user(@Arg("id") id: "string"): Promise<User | undefined> {
     return await User.findOne(id, {
-      relations: ["bankAccounts", "bankAccounts.expenses"]
+      relations: [
+        "bankAccounts",
+        "bankAccounts.expenses",
+        "bankAccounts.incomes"
+      ]
     });
   }
 
