@@ -56,6 +56,9 @@ type Mutation {
 
 type Query {
   me: User
+  expenses(id: String!): [Expense!]!
+  bankAccount(id: String!): BankAccount!
+  bankAccounts(id: String!): [BankAccount!]!
   users: [User!]!
   user(id: String!): User!
 }
