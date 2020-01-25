@@ -13,6 +13,9 @@ export class IncomeResolver {
     @Arg("description") description: string
   ): Promise<Boolean> {
     const bankAccount = await BankAccount.findOne(id);
+    if (!bankAccount) {
+      return false;
+    }
     const date = new Date();
     Income.create({
       amount: amount,
@@ -20,6 +23,9 @@ export class IncomeResolver {
       bankAccount: bankAccount,
       date: date
     }).save();
+
+    bankAccount.moneyAmount += amount;
+    bankAccount.save();
     return true;
   }
 }

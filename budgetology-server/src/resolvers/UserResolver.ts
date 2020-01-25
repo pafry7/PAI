@@ -43,4 +43,34 @@ export class UserResolver {
     await User.delete({ id });
     return true;
   }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async addCash(
+    @Arg("id") id: string,
+    @Arg("amount") amount: number
+  ): Promise<Boolean> {
+    const user = await User.findOne({ id });
+    if (!user) {
+      return false;
+    }
+    user.cash += amount;
+    user.save();
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async subtractCash(
+    @Arg("id") id: string,
+    @Arg("amount") amount: number
+  ): Promise<Boolean> {
+    const user = await User.findOne({ id });
+    if (!user) {
+      return false;
+    }
+    user.cash -= amount;
+    user.save();
+    return true;
+  }
 }

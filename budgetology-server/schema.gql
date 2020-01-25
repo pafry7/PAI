@@ -55,6 +55,8 @@ type Mutation {
   addIncome(description: String!, amount: Float!, id: String!): Boolean!
   updateUser(data: UpdateInput!, id: String!): Boolean!
   deleteUser(id: String!): Boolean!
+  addCash(amount: Float!, id: String!): Boolean!
+  subtractCash(amount: Float!, id: String!): Boolean!
 }
 
 type Query {

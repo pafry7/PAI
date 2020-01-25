@@ -13,6 +13,9 @@ export class ExpenseResolver {
     @Arg("description") description: string
   ): Promise<Boolean> {
     const bankAccount = await BankAccount.findOne(id);
+    if (!bankAccount) {
+      return false;
+    }
     const date = new Date();
     Expense.create({
       amount: amount,
@@ -20,6 +23,9 @@ export class ExpenseResolver {
       bankAccount: bankAccount,
       date: date
     }).save();
+
+    bankAccount.moneyAmount -= amount;
+    bankAccount.save();
     return true;
   }
 }
