@@ -34,7 +34,11 @@ export const Budget = () => {
           {data && `Cash: ${data.user.cash} PLN`}
         </Typography>
         <Typography className={classes.typoMargin}>
-          {data && `Account: ${data.user.bankAccounts![0].moneyAmount} PLN`}
+          {data &&
+            data.user &&
+            data.user.bankAccounts &&
+            data.user.bankAccounts[0] &&
+            `Account: ${data.user.bankAccounts[0].moneyAmount} PLN`}
         </Typography>
       </CardContent>
     </Card>
