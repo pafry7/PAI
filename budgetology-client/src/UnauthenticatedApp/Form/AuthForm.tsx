@@ -25,7 +25,7 @@ interface AuthFormProps {
 
 export const AuthForm = ({ text }: AuthFormProps) => {
   const classes = useStyles();
-  const { login }: any = useAuth();
+  const { login, setUser }: any = useAuth();
   const [loginMutation] = useLoginMutation();
   const [registerMutation] = useRegisterMutation();
 
@@ -59,6 +59,7 @@ export const AuthForm = ({ text }: AuthFormProps) => {
                   response.data.login.user.id
                 ) {
                   login();
+                  setUser(response.data.login.user.id);
                 }
               })
               .catch(err => {
