@@ -1,9 +1,6 @@
 import React, { useContext, useState } from "react";
-import {
-  useLoginMutation,
-  useLogoutMutation,
-  useRegisterMutation
-} from "generated/apolloComponents";
+
+import { useLogoutMutation } from "generated/apolloComponents";
 
 const AuthContext = React.createContext({});
 

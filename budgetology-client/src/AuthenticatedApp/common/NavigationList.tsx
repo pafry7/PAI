@@ -13,7 +13,6 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import { useAuth } from "common/AuthContent";
-import { useLogoutMutation } from "generated/apolloComponents";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,7 +41,6 @@ export function NavigationList() {
   const classes = useStyles();
   const { logout }: any = useAuth();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
-  const [logoutMutation] = useLogoutMutation();
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number
