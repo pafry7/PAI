@@ -80,7 +80,8 @@ export class BankAccountResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async deleteBankAccount(@Arg("id") id: string): Promise<Boolean> {
-    await BankAccount.delete({ id });
+    await BankAccount.delete(id);
+
     return true;
   }
 }

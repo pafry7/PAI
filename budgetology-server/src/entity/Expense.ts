@@ -30,7 +30,8 @@ export class Expense extends BaseEntity {
 
   @ManyToOne(
     () => BankAccount,
-    bankAccount => bankAccount.expenses
+    bankAccount => bankAccount.expenses,
+    { onDelete: "CASCADE" }
   )
   bankAccount: BankAccount;
 }
