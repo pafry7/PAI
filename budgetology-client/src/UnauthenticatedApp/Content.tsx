@@ -3,7 +3,6 @@ import React, { useState } from "react";
 
 import { AuthDialog } from "UnauthenticatedApp/Form/AuthDialog";
 import image from "UnauthenticatedApp/image.svg";
-import { useAuth } from "common/AuthContent";
 
 const useStyles = makeStyles(theme => ({
   container: {

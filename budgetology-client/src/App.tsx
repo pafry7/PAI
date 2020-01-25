@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 
 import { AuthenticatedApp } from "AuthenticatedApp";
-import { LogoutComponent } from "generated/apolloComponents";
 import { UnauthenticatedApp } from "UnauthenticatedApp";
 import { useAuth } from "common/AuthContent";
 
@@ -13,11 +12,7 @@ const App: React.FC = () => {
     }
   });
 
-  if (authenticated) {
-    return <AuthenticatedApp />;
-  } else {
-    return <UnauthenticatedApp />;
-  }
+  return authenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />;
 };
 
 export default App;

@@ -1,15 +1,25 @@
 import React, { useContext, useState } from "react";
+import {
+  useLoginMutation,
+  useLogoutMutation,
+  useRegisterMutation
+} from "generated/apolloComponents";
+
 const AuthContext = React.createContext({});
 
 const AuthProvider = (props: any) => {
   const [authenticated, setAuthenticated] = useState(false);
-  const login = () => {
+  const [logoutMutation] = useLogoutMutation();
+  const [user, setUser]: any = useState(null);
+  const login = async () => {
     setAuthenticated(true);
   };
-  const me = () => {};
-
-  const logout = () => {
-    setAuthenticated(false);
+  const logout = async () => {
+    const response = await logoutMutation();
+    if (response && response.data && response.data.logout) {
+      setAuthenticated(false);
+      setUser(false);
+    }
   };
   const register = () => console.log("register");
 
@@ -18,8 +28,9 @@ const AuthProvider = (props: any) => {
       value={{
         authenticated,
         login,
+        setUser,
         logout,
-        me,
+        user,
         register
       }}
       {...props}

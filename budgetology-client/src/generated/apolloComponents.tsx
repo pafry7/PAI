@@ -13,11 +13,35 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  DateTime: any,
 };
 
 export type AuthInput = {
   email: Scalars['String'],
   password: Scalars['String'],
+};
+
+export type BankAccount = {
+   __typename?: 'BankAccount',
+  id: Scalars['ID'],
+  bankName: Scalars['String'],
+  moneyAmount: Scalars['Float'],
+  expenses?: Maybe<Array<Expense>>,
+  incomes?: Maybe<Array<Income>>,
+};
+
+export type BankAccountInput = {
+  bankName: Scalars['String'],
+  moneyAmount: Scalars['Float'],
+};
+
+
+export type Expense = {
+   __typename?: 'Expense',
+  id: Scalars['ID'],
+  amount: Scalars['Float'],
+  description: Scalars['String'],
+  date?: Maybe<Scalars['DateTime']>,
 };
 
 export type FieldError = {
@@ -26,11 +50,22 @@ export type FieldError = {
   message: Scalars['String'],
 };
 
+export type Income = {
+   __typename?: 'Income',
+  id: Scalars['ID'],
+  amount: Scalars['Float'],
+  description: Scalars['String'],
+  date?: Maybe<Scalars['DateTime']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   register: UserResponse,
   login: UserResponse,
   logout: Scalars['Boolean'],
+  addBankAccount: Scalars['Boolean'],
+  addExpense: Scalars['Boolean'],
+  addIncome: Scalars['Boolean'],
   updateUser: Scalars['Boolean'],
   deleteUser: Scalars['Boolean'],
 };
@@ -43,6 +78,26 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   input: AuthInput
+};
+
+
+export type MutationAddBankAccountArgs = {
+  data: BankAccountInput,
+  id: Scalars['String']
+};
+
+
+export type MutationAddExpenseArgs = {
+  description: Scalars['String'],
+  amount: Scalars['Float'],
+  id: Scalars['String']
+};
+
+
+export type MutationAddIncomeArgs = {
+  description: Scalars['String'],
+  amount: Scalars['Float'],
+  id: Scalars['String']
 };
 
 
@@ -59,13 +114,44 @@ export type MutationDeleteUserArgs = {
 export type Query = {
    __typename?: 'Query',
   me?: Maybe<User>,
+  expenses: Array<Expense>,
+  incomes: Array<Income>,
+  bankAccount: BankAccount,
+  bankAccounts: Array<BankAccount>,
   users: Array<User>,
+  user: User,
+};
+
+
+export type QueryExpensesArgs = {
+  id: Scalars['String']
+};
+
+
+export type QueryIncomesArgs = {
+  id: Scalars['String']
+};
+
+
+export type QueryBankAccountArgs = {
+  id: Scalars['String']
+};
+
+
+export type QueryBankAccountsArgs = {
+  id: Scalars['String']
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['String']
 };
 
 export type UpdateInput = {
   email: Scalars['String'],
   password: Scalars['String'],
   name: Scalars['String'],
+  cash: Scalars['Float'],
 };
 
 export type User = {
@@ -73,6 +159,9 @@ export type User = {
   id: Scalars['ID'],
   email: Scalars['String'],
   name?: Maybe<Scalars['String']>,
+  cash?: Maybe<Scalars['Float']>,
+  budget: Scalars['Float'],
+  bankAccounts?: Maybe<Array<BankAccount>>,
 };
 
 export type UserResponse = {
@@ -114,6 +203,50 @@ export type MeQuery = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'email' | 'name'>
   )> }
+);
+
+export type OverviewQueryVariables = {
+  id: Scalars['String']
+};
+
+
+export type OverviewQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & Pick<User, 'cash' | 'budget'>
+    & { bankAccounts: Maybe<Array<(
+      { __typename?: 'BankAccount' }
+      & Pick<BankAccount, 'moneyAmount'>
+    )>> }
+  ) }
+);
+
+export type BankAccountsQueryVariables = {
+  id: Scalars['String']
+};
+
+
+export type BankAccountsQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & { bankAccounts: Maybe<Array<(
+      { __typename?: 'BankAccount' }
+      & Pick<BankAccount, 'bankName' | 'id'>
+    )>> }
+  ) }
+);
+
+export type AddBankAccountMutationVariables = {
+  id: Scalars['String'],
+  data: BankAccountInput
+};
+
+
+export type AddBankAccountMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addBankAccount'>
 );
 
 export type RegisterMutationVariables = {
@@ -281,6 +414,161 @@ export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptio
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
+export const OverviewDocument = gql`
+    query overview($id: String!) {
+  user(id: $id) {
+    cash
+    budget
+    bankAccounts {
+      moneyAmount
+    }
+  }
+}
+    `;
+export type OverviewComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<OverviewQuery, OverviewQueryVariables>, 'query'> & ({ variables: OverviewQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const OverviewComponent = (props: OverviewComponentProps) => (
+      <ApolloReactComponents.Query<OverviewQuery, OverviewQueryVariables> query={OverviewDocument} {...props} />
+    );
+    
+export type OverviewProps<TChildProps = {}> = ApolloReactHoc.DataProps<OverviewQuery, OverviewQueryVariables> & TChildProps;
+export function withOverview<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  OverviewQuery,
+  OverviewQueryVariables,
+  OverviewProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, OverviewQuery, OverviewQueryVariables, OverviewProps<TChildProps>>(OverviewDocument, {
+      alias: 'overview',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useOverviewQuery__
+ *
+ * To run a query within a React component, call `useOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOverviewQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOverviewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOverviewQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<OverviewQuery, OverviewQueryVariables>) {
+        return ApolloReactHooks.useQuery<OverviewQuery, OverviewQueryVariables>(OverviewDocument, baseOptions);
+      }
+export function useOverviewLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<OverviewQuery, OverviewQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<OverviewQuery, OverviewQueryVariables>(OverviewDocument, baseOptions);
+        }
+export type OverviewQueryHookResult = ReturnType<typeof useOverviewQuery>;
+export type OverviewLazyQueryHookResult = ReturnType<typeof useOverviewLazyQuery>;
+export type OverviewQueryResult = ApolloReactCommon.QueryResult<OverviewQuery, OverviewQueryVariables>;
+export const BankAccountsDocument = gql`
+    query bankAccounts($id: String!) {
+  user(id: $id) {
+    bankAccounts {
+      bankName
+      id
+    }
+  }
+}
+    `;
+export type BankAccountsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<BankAccountsQuery, BankAccountsQueryVariables>, 'query'> & ({ variables: BankAccountsQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const BankAccountsComponent = (props: BankAccountsComponentProps) => (
+      <ApolloReactComponents.Query<BankAccountsQuery, BankAccountsQueryVariables> query={BankAccountsDocument} {...props} />
+    );
+    
+export type BankAccountsProps<TChildProps = {}> = ApolloReactHoc.DataProps<BankAccountsQuery, BankAccountsQueryVariables> & TChildProps;
+export function withBankAccounts<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  BankAccountsQuery,
+  BankAccountsQueryVariables,
+  BankAccountsProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, BankAccountsQuery, BankAccountsQueryVariables, BankAccountsProps<TChildProps>>(BankAccountsDocument, {
+      alias: 'bankAccounts',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useBankAccountsQuery__
+ *
+ * To run a query within a React component, call `useBankAccountsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBankAccountsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBankAccountsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBankAccountsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<BankAccountsQuery, BankAccountsQueryVariables>) {
+        return ApolloReactHooks.useQuery<BankAccountsQuery, BankAccountsQueryVariables>(BankAccountsDocument, baseOptions);
+      }
+export function useBankAccountsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<BankAccountsQuery, BankAccountsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<BankAccountsQuery, BankAccountsQueryVariables>(BankAccountsDocument, baseOptions);
+        }
+export type BankAccountsQueryHookResult = ReturnType<typeof useBankAccountsQuery>;
+export type BankAccountsLazyQueryHookResult = ReturnType<typeof useBankAccountsLazyQuery>;
+export type BankAccountsQueryResult = ApolloReactCommon.QueryResult<BankAccountsQuery, BankAccountsQueryVariables>;
+export const AddBankAccountDocument = gql`
+    mutation AddBankAccount($id: String!, $data: BankAccountInput!) {
+  addBankAccount(id: $id, data: $data)
+}
+    `;
+export type AddBankAccountMutationFn = ApolloReactCommon.MutationFunction<AddBankAccountMutation, AddBankAccountMutationVariables>;
+export type AddBankAccountComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddBankAccountMutation, AddBankAccountMutationVariables>, 'mutation'>;
+
+    export const AddBankAccountComponent = (props: AddBankAccountComponentProps) => (
+      <ApolloReactComponents.Mutation<AddBankAccountMutation, AddBankAccountMutationVariables> mutation={AddBankAccountDocument} {...props} />
+    );
+    
+export type AddBankAccountProps<TChildProps = {}> = ApolloReactHoc.MutateProps<AddBankAccountMutation, AddBankAccountMutationVariables> & TChildProps;
+export function withAddBankAccount<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AddBankAccountMutation,
+  AddBankAccountMutationVariables,
+  AddBankAccountProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, AddBankAccountMutation, AddBankAccountMutationVariables, AddBankAccountProps<TChildProps>>(AddBankAccountDocument, {
+      alias: 'addBankAccount',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useAddBankAccountMutation__
+ *
+ * To run a mutation, you first call `useAddBankAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddBankAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addBankAccountMutation, { data, loading, error }] = useAddBankAccountMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAddBankAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddBankAccountMutation, AddBankAccountMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddBankAccountMutation, AddBankAccountMutationVariables>(AddBankAccountDocument, baseOptions);
+      }
+export type AddBankAccountMutationHookResult = ReturnType<typeof useAddBankAccountMutation>;
+export type AddBankAccountMutationResult = ApolloReactCommon.MutationResult<AddBankAccountMutation>;
+export type AddBankAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<AddBankAccountMutation, AddBankAccountMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($input: AuthInput!) {
   register(input: $input) {
