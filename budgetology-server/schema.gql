@@ -50,6 +50,7 @@ type Mutation {
   login(input: AuthInput!): UserResponse!
   logout: Boolean!
   addBankAccount(data: BankAccountInput!, id: String!): Boolean!
+  deleteBankAccount(id: String!): Boolean!
   addExpense(description: String!, amount: Float!, id: String!): Boolean!
   addIncome(description: String!, amount: Float!, id: String!): Boolean!
   updateUser(data: UpdateInput!, id: String!): Boolean!

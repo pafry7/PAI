@@ -27,3 +27,9 @@ export const addBankAccountMutation = gql`
     addBankAccount(id: $id, data: $data)
   }
 `;
+
+export const deleteBankAccountMutation = gql`
+  mutation deleteBankAccount($id: String!) {
+    deleteBankAccount(id: $id)
+  }
+`;

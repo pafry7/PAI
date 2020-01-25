@@ -76,4 +76,11 @@ export class BankAccountResolver {
     }
     return user.bankAccounts;
   }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async deleteBankAccount(@Arg("id") id: string): Promise<Boolean> {
+    await BankAccount.delete({ id });
+    return true;
+  }
 }

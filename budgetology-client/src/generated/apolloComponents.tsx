@@ -64,6 +64,7 @@ export type Mutation = {
   login: UserResponse,
   logout: Scalars['Boolean'],
   addBankAccount: Scalars['Boolean'],
+  deleteBankAccount: Scalars['Boolean'],
   addExpense: Scalars['Boolean'],
   addIncome: Scalars['Boolean'],
   updateUser: Scalars['Boolean'],
@@ -83,6 +84,11 @@ export type MutationLoginArgs = {
 
 export type MutationAddBankAccountArgs = {
   data: BankAccountInput,
+  id: Scalars['String']
+};
+
+
+export type MutationDeleteBankAccountArgs = {
   id: Scalars['String']
 };
 
@@ -247,6 +253,16 @@ export type AddBankAccountMutationVariables = {
 export type AddBankAccountMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'addBankAccount'>
+);
+
+export type DeleteBankAccountMutationVariables = {
+  id: Scalars['String']
+};
+
+
+export type DeleteBankAccountMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteBankAccount'>
 );
 
 export type RegisterMutationVariables = {
@@ -569,6 +585,53 @@ export function useAddBankAccountMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type AddBankAccountMutationHookResult = ReturnType<typeof useAddBankAccountMutation>;
 export type AddBankAccountMutationResult = ApolloReactCommon.MutationResult<AddBankAccountMutation>;
 export type AddBankAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<AddBankAccountMutation, AddBankAccountMutationVariables>;
+export const DeleteBankAccountDocument = gql`
+    mutation deleteBankAccount($id: String!) {
+  deleteBankAccount(id: $id)
+}
+    `;
+export type DeleteBankAccountMutationFn = ApolloReactCommon.MutationFunction<DeleteBankAccountMutation, DeleteBankAccountMutationVariables>;
+export type DeleteBankAccountComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<DeleteBankAccountMutation, DeleteBankAccountMutationVariables>, 'mutation'>;
+
+    export const DeleteBankAccountComponent = (props: DeleteBankAccountComponentProps) => (
+      <ApolloReactComponents.Mutation<DeleteBankAccountMutation, DeleteBankAccountMutationVariables> mutation={DeleteBankAccountDocument} {...props} />
+    );
+    
+export type DeleteBankAccountProps<TChildProps = {}> = ApolloReactHoc.MutateProps<DeleteBankAccountMutation, DeleteBankAccountMutationVariables> & TChildProps;
+export function withDeleteBankAccount<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  DeleteBankAccountMutation,
+  DeleteBankAccountMutationVariables,
+  DeleteBankAccountProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, DeleteBankAccountMutation, DeleteBankAccountMutationVariables, DeleteBankAccountProps<TChildProps>>(DeleteBankAccountDocument, {
+      alias: 'deleteBankAccount',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useDeleteBankAccountMutation__
+ *
+ * To run a mutation, you first call `useDeleteBankAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBankAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBankAccountMutation, { data, loading, error }] = useDeleteBankAccountMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteBankAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteBankAccountMutation, DeleteBankAccountMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteBankAccountMutation, DeleteBankAccountMutationVariables>(DeleteBankAccountDocument, baseOptions);
+      }
+export type DeleteBankAccountMutationHookResult = ReturnType<typeof useDeleteBankAccountMutation>;
+export type DeleteBankAccountMutationResult = ApolloReactCommon.MutationResult<DeleteBankAccountMutation>;
+export type DeleteBankAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteBankAccountMutation, DeleteBankAccountMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($input: AuthInput!) {
   register(input: $input) {
