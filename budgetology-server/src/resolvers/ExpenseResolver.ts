@@ -10,13 +10,13 @@ export class ExpenseResolver {
   async addExpense(
     @Arg("id") id: string,
     @Arg("amount") amount: number,
+    @Arg("date") date: Date,
     @Arg("description") description: string
   ): Promise<Boolean> {
     const bankAccount = await BankAccount.findOne(id);
     if (!bankAccount) {
       return false;
     }
-    const date = new Date();
     Expense.create({
       amount: amount,
       description: description,

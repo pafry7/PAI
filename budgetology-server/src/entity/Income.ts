@@ -25,7 +25,7 @@ export class Income extends BaseEntity {
   description: string;
 
   @Field({ nullable: true })
-  @Column("numeric")
+  @Column()
   date: Date;
 
   @ManyToOne(

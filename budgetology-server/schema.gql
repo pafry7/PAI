@@ -51,8 +51,8 @@ type Mutation {
   logout: Boolean!
   addBankAccount(data: BankAccountInput!, id: String!): Boolean!
   deleteBankAccount(id: String!): Boolean!
-  addExpense(description: String!, amount: Float!, id: String!): Boolean!
-  addIncome(description: String!, amount: Float!, id: String!): Boolean!
+  addExpense(description: String!, date: DateTime!, amount: Float!, id: String!): Boolean!
+  addIncome(description: String!, date: DateTime!, amount: Float!, id: String!): Boolean!
   updateUser(data: UpdateInput!, id: String!): Boolean!
   deleteUser(id: String!): Boolean!
   addCash(amount: Float!, id: String!): Boolean!
