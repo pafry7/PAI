@@ -13,8 +13,9 @@ const RedirectHome = (props: RouteComponentProps) => (
 
 export function AuthenticatedApp() {
   const { setUser }: any = useAuth();
-  const { loading, data } = useMeQuery();
+  const { loading, data, refetch } = useMeQuery();
   useEffect(() => {
+    refetch();
     if (data && data.me && data.me.id) {
       setUser(data.me.id);
     }

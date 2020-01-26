@@ -45,6 +45,15 @@ type Income {
   date: DateTime
 }
 
+type MoneyFlow {
+  amount: Float
+  description: String
+  id: String
+  date: DateTime
+  bankName: String
+  type: String
+}
+
 type Mutation {
   register(input: AuthInput!): UserResponse!
   login(input: AuthInput!): UserResponse!
@@ -65,6 +74,7 @@ type Query {
   incomes(id: String!): [Income!]!
   bankAccount(id: String!): BankAccount!
   bankAccounts(id: String!): [BankAccount!]!
+  all(id: String!): [MoneyFlow!]
   users: [User!]!
   user(id: String!): User!
 }

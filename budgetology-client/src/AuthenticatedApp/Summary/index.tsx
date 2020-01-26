@@ -1,13 +1,12 @@
-import { Box, Container, makeStyles } from "@material-ui/core";
+import { Box, Container, Paper, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 
 import { Budget } from "AuthenticatedApp/Summary/Budget";
 import { CircleDial } from "AuthenticatedApp/common/CircleDial";
 import { NavigationList } from "AuthenticatedApp/common/NavigationList";
 import { RouteComponentProps } from "@reach/router";
+import { TableComponent } from "AuthenticatedApp/Summary/TableComponent";
 import image from "AuthenticatedApp/Summary/graph_image.svg";
-import { useAuth } from "common/AuthContent";
-import { useMeQuery } from "generated/apolloComponents";
 
 const useStyles = makeStyles(theme => ({
   outerWrap: {
@@ -34,7 +33,6 @@ const useStyles = makeStyles(theme => ({
     width: "50vh"
   }
 }));
-
 export const Summary: React.FC<RouteComponentProps> = () => {
   const classes = useStyles();
 
@@ -46,6 +44,7 @@ export const Summary: React.FC<RouteComponentProps> = () => {
           <img src={image} className={classes.image} alt="Man with graph" />
           <Budget />
         </Box>
+        <TableComponent />
       </Container>
       <CircleDial />
     </div>

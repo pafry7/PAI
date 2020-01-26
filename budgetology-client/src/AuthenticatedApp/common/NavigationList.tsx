@@ -24,6 +24,7 @@ import { useAuth } from "common/AuthContent";
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
+    color: theme.palette.common.white,
     maxWidth: 360,
     height: "inherit",
     backgroundColor: theme.palette.secondary.main
@@ -47,12 +48,20 @@ const useStyles = makeStyles(theme => ({
 export function NavigationList() {
   const classes = useStyles();
   const { logout, user }: any = useAuth();
-  const { loading, data } = useBankAccountsQuery({ variables: { id: user } });
+  const { loading, data, startPolling, refetch } = useBankAccountsQuery({
+    variables: { id: user }
+  });
   const [deleteBankAccountMutation] = useDeleteBankAccountMutation();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-
+  if (data) {
+    startPolling(1000);
+  }
   const handleBankAccountRemoval = async (id: string) => {
-    await deleteBankAccountMutation({ variables: { id: id } });
+    console.log(id);
+    const response = await deleteBankAccountMutation({ variables: { id: id } });
+    if (response && response.data && response.data.deleteBankAccount) {
+      refetch();
+    }
   };
 
   const handleListItemClick = (
@@ -64,6 +73,7 @@ export function NavigationList() {
 
   let numberOfAccounts = 0;
   if (data && data.user && data.user.bankAccounts) {
+    // startPolling(5000);
     numberOfAccounts = data.user.bankAccounts.length;
   }
 

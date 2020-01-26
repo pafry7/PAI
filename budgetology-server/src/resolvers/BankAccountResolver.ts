@@ -5,7 +5,7 @@ import { BankAccountInput } from "graphql-types/BankAccountInput";
 import { BankAccount } from "entity/BankAccount";
 import { Expense } from "entity/Expense";
 import { Income } from "entity/Income";
-
+import { MoneyFlow } from "graphql-types/MoneyFlow";
 @Resolver()
 export class BankAccountResolver {
   @Mutation(() => Boolean)
@@ -83,5 +83,35 @@ export class BankAccountResolver {
     await BankAccount.delete(id);
 
     return true;
+  }
+
+  @Query(() => [MoneyFlow], { nullable: true })
+  @UseMiddleware(isAuth)
+  async all(@Arg("id") id: string): Promise<Array<MoneyFlow> | undefined> {
+    const user = await User.findOne(id, {
+      relations: [
+        "bankAccounts",
+        "bankAccounts.expenses",
+        "bankAccounts.incomes"
+      ]
+    });
+    if (!user) {
+      return undefined;
+    }
+    const retval: Array<MoneyFlow> = [];
+    user.bankAccounts.map(bank => {
+      bank.expenses.map(expense =>
+        retval.push({ ...expense, type: "expense", bankName: bank.bankName })
+      );
+      bank.incomes.map(income =>
+        retval.push({ ...income, type: "income", bankName: bank.bankName })
+      );
+    });
+
+    retval.sort(function(a, b) {
+      return b.date.getTime() - a.date.getTime();
+    });
+
+    return retval;
   }
 }

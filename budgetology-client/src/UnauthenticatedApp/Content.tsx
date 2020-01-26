@@ -7,6 +7,7 @@ import image from "UnauthenticatedApp/image.svg";
 const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
+    color: theme.palette.common.white,
     justifyContent: "space-between",
     marginTop: "8rem",
     alignItems: "center"

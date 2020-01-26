@@ -7,7 +7,11 @@ const useStyles = makeStyles(theme => ({
   header: {
     paddingTop: theme.spacing(4),
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    color: theme.palette.common.white
+  },
+  colorLogin: {
+    color: theme.palette.common.white
   },
   logo: {
     fontSize: "1.5vw",
@@ -18,6 +22,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     width: "140px",
     justifyContent: "space-between",
+    color: theme.palette.common.white,
     alignItems: "center",
     alignContent: "center",
     fontWeight: theme.typography.fontWeightBold,
@@ -45,7 +50,12 @@ export const Header = () => {
           Budgetology
         </div>
         <div aria-label="Login and Signup buttons" className={classes.nav}>
-          <Button onClick={() => handleOpen("Login")}>Login </Button>
+          <Button
+            className={classes.colorLogin}
+            onClick={() => handleOpen("Login")}
+          >
+            Login
+          </Button>
           <Button color="primary" onClick={() => handleOpen("Sign up")}>
             Sign up
           </Button>

@@ -15,7 +15,11 @@ const useStyles = makeStyles(theme => ({
   },
   div: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    width: "100%"
+  },
+  formWidth: {
+    width: "90%"
   }
 }));
 
@@ -29,14 +33,6 @@ export const BankAccountForm: React.FC<FormProps> = ({ handleClose }) => {
   const [addBankAccountMutation] = useAddBankAccountMutation();
   const classes = useStyles();
 
-  const handleChange = (e: any) => {
-    const target = e.target;
-    if (target.name === "bankName")
-      setValue(old => ({ ...old, bankName: target.value }));
-    else {
-      setValue(old => ({ ...old, moneyAmount: target.value }));
-    }
-  };
   console.log(value);
 
   const handleSubmit = async (e: any) => {
@@ -53,9 +49,17 @@ export const BankAccountForm: React.FC<FormProps> = ({ handleClose }) => {
     console.log(response);
     handleClose();
   };
-
+  const handleChange = (e: any) => {
+    const value = e.target.value;
+    const name = e.target.name;
+    setValue(old => ({ ...old, [name]: value }));
+  };
   return (
-    <form id="bank-account-form" onSubmit={(e: any) => handleSubmit(e)}>
+    <form
+      id="bank-account-form"
+      className={classes.formWidth}
+      onSubmit={(e: any) => handleSubmit(e)}
+    >
       <div className={classes.div}>
         <InputLabel id="bank">Bank name</InputLabel>
         <TextField
@@ -66,14 +70,15 @@ export const BankAccountForm: React.FC<FormProps> = ({ handleClose }) => {
             classes: { root: classes.dialogText }
           }}
           name="bankName"
+          fullWidth
           value={value.bankName}
           onChange={(e: any) => handleChange(e)}
         />
-
         <InputLabel id="moneyAmount">Amount of money</InputLabel>
         <TextField
           color="primary"
           id="amount-field"
+          fullWidth
           className={classes.dialogText}
           InputProps={{
             inputProps: { min: 0 },

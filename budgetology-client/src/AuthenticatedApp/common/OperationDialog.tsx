@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 
 import { BankAccountForm } from "AuthenticatedApp/common/operationForm/BankAccountForm";
-import { IncomeForm } from "AuthenticatedApp/common/operationForm/IncomeForm";
+import { MoneyFlowForm } from "AuthenticatedApp/common/operationForm/MoneyFlowForm";
 import React from "react";
 
 const useStyles = makeStyles(theme => ({
@@ -17,6 +17,11 @@ const useStyles = makeStyles(theme => ({
   },
   dialogWidth: {
     width: "20%"
+  },
+  dialogContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   }
 }));
 
@@ -25,14 +30,20 @@ interface OperationDialogProps {
   open: boolean;
   text: string;
 }
-
+const modes = { cash: "cash", bankaccount: "bankaccount" };
 export const OperationDialog = ({
   handleClose,
   open,
   text
 }: OperationDialogProps) => {
+  const [mode, setMode] = React.useState(modes.cash);
   const classes = useStyles();
-  const formId = "bank-account-form";
+  const formId =
+    text === "Add account"
+      ? "bank-account-form"
+      : mode === modes.cash
+      ? "cash-form"
+      : "add-income-form";
   const handleSubmit = () => {
     document
       .getElementById(formId)!
@@ -45,11 +56,16 @@ export const OperationDialog = ({
       onClose={handleClose}
     >
       <DialogTitle className={classes.dialogText}>{text}</DialogTitle>
-      <DialogContent>
+      <DialogContent className={classes.dialogContent}>
         {text === "Add account" ? (
           <BankAccountForm handleClose={handleClose} />
         ) : (
-          <IncomeForm />
+          <MoneyFlowForm
+            text={text}
+            handleClose={handleClose}
+            mode={mode}
+            setMode={setMode}
+          />
         )}
       </DialogContent>
       <DialogActions>

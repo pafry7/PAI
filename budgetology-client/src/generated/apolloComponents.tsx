@@ -58,6 +58,16 @@ export type Income = {
   date?: Maybe<Scalars['DateTime']>,
 };
 
+export type MoneyFlow = {
+   __typename?: 'MoneyFlow',
+  amount?: Maybe<Scalars['Float']>,
+  description?: Maybe<Scalars['String']>,
+  id?: Maybe<Scalars['String']>,
+  date?: Maybe<Scalars['DateTime']>,
+  bankName?: Maybe<Scalars['String']>,
+  type?: Maybe<Scalars['String']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   register: UserResponse,
@@ -69,6 +79,8 @@ export type Mutation = {
   addIncome: Scalars['Boolean'],
   updateUser: Scalars['Boolean'],
   deleteUser: Scalars['Boolean'],
+  addCash: Scalars['Boolean'],
+  subtractCash: Scalars['Boolean'],
 };
 
 
@@ -95,6 +107,7 @@ export type MutationDeleteBankAccountArgs = {
 
 export type MutationAddExpenseArgs = {
   description: Scalars['String'],
+  date: Scalars['DateTime'],
   amount: Scalars['Float'],
   id: Scalars['String']
 };
@@ -102,6 +115,7 @@ export type MutationAddExpenseArgs = {
 
 export type MutationAddIncomeArgs = {
   description: Scalars['String'],
+  date: Scalars['DateTime'],
   amount: Scalars['Float'],
   id: Scalars['String']
 };
@@ -117,6 +131,18 @@ export type MutationDeleteUserArgs = {
   id: Scalars['String']
 };
 
+
+export type MutationAddCashArgs = {
+  amount: Scalars['Float'],
+  id: Scalars['String']
+};
+
+
+export type MutationSubtractCashArgs = {
+  amount: Scalars['Float'],
+  id: Scalars['String']
+};
+
 export type Query = {
    __typename?: 'Query',
   me?: Maybe<User>,
@@ -124,6 +150,7 @@ export type Query = {
   incomes: Array<Income>,
   bankAccount: BankAccount,
   bankAccounts: Array<BankAccount>,
+  all?: Maybe<Array<MoneyFlow>>,
   users: Array<User>,
   user: User,
 };
@@ -145,6 +172,11 @@ export type QueryBankAccountArgs = {
 
 
 export type QueryBankAccountsArgs = {
+  id: Scalars['String']
+};
+
+
+export type QueryAllArgs = {
   id: Scalars['String']
 };
 
@@ -175,6 +207,54 @@ export type UserResponse = {
   user?: Maybe<User>,
   errors?: Maybe<Array<FieldError>>,
 };
+
+export type AddCashMutationVariables = {
+  id: Scalars['String'],
+  amount: Scalars['Float']
+};
+
+
+export type AddCashMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCash'>
+);
+
+export type SubtractCashMutationVariables = {
+  id: Scalars['String'],
+  amount: Scalars['Float']
+};
+
+
+export type SubtractCashMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'subtractCash'>
+);
+
+export type AddIncomeMutationVariables = {
+  id: Scalars['String'],
+  amount: Scalars['Float'],
+  description: Scalars['String'],
+  date: Scalars['DateTime']
+};
+
+
+export type AddIncomeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addIncome'>
+);
+
+export type AddExpenseMutationVariables = {
+  id: Scalars['String'],
+  amount: Scalars['Float'],
+  description: Scalars['String'],
+  date: Scalars['DateTime']
+};
+
+
+export type AddExpenseMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addExpense'>
+);
 
 export type LoginMutationVariables = {
   input: AuthInput
@@ -209,6 +289,19 @@ export type MeQuery = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'email' | 'name'>
   )> }
+);
+
+export type MoneyFlowQueryVariables = {
+  id: Scalars['String']
+};
+
+
+export type MoneyFlowQuery = (
+  { __typename?: 'Query' }
+  & { all: Maybe<Array<(
+    { __typename?: 'MoneyFlow' }
+    & Pick<MoneyFlow, 'amount' | 'id' | 'description' | 'date' | 'type' | 'bankName'>
+  )>> }
 );
 
 export type OverviewQueryVariables = {
@@ -282,6 +375,202 @@ export type RegisterMutation = (
 );
 
 
+export const AddCashDocument = gql`
+    mutation addCash($id: String!, $amount: Float!) {
+  addCash(id: $id, amount: $amount)
+}
+    `;
+export type AddCashMutationFn = ApolloReactCommon.MutationFunction<AddCashMutation, AddCashMutationVariables>;
+export type AddCashComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddCashMutation, AddCashMutationVariables>, 'mutation'>;
+
+    export const AddCashComponent = (props: AddCashComponentProps) => (
+      <ApolloReactComponents.Mutation<AddCashMutation, AddCashMutationVariables> mutation={AddCashDocument} {...props} />
+    );
+    
+export type AddCashProps<TChildProps = {}> = ApolloReactHoc.MutateProps<AddCashMutation, AddCashMutationVariables> & TChildProps;
+export function withAddCash<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AddCashMutation,
+  AddCashMutationVariables,
+  AddCashProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, AddCashMutation, AddCashMutationVariables, AddCashProps<TChildProps>>(AddCashDocument, {
+      alias: 'addCash',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useAddCashMutation__
+ *
+ * To run a mutation, you first call `useAddCashMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCashMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCashMutation, { data, loading, error }] = useAddCashMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      amount: // value for 'amount'
+ *   },
+ * });
+ */
+export function useAddCashMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCashMutation, AddCashMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCashMutation, AddCashMutationVariables>(AddCashDocument, baseOptions);
+      }
+export type AddCashMutationHookResult = ReturnType<typeof useAddCashMutation>;
+export type AddCashMutationResult = ApolloReactCommon.MutationResult<AddCashMutation>;
+export type AddCashMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCashMutation, AddCashMutationVariables>;
+export const SubtractCashDocument = gql`
+    mutation subtractCash($id: String!, $amount: Float!) {
+  subtractCash(id: $id, amount: $amount)
+}
+    `;
+export type SubtractCashMutationFn = ApolloReactCommon.MutationFunction<SubtractCashMutation, SubtractCashMutationVariables>;
+export type SubtractCashComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SubtractCashMutation, SubtractCashMutationVariables>, 'mutation'>;
+
+    export const SubtractCashComponent = (props: SubtractCashComponentProps) => (
+      <ApolloReactComponents.Mutation<SubtractCashMutation, SubtractCashMutationVariables> mutation={SubtractCashDocument} {...props} />
+    );
+    
+export type SubtractCashProps<TChildProps = {}> = ApolloReactHoc.MutateProps<SubtractCashMutation, SubtractCashMutationVariables> & TChildProps;
+export function withSubtractCash<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  SubtractCashMutation,
+  SubtractCashMutationVariables,
+  SubtractCashProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, SubtractCashMutation, SubtractCashMutationVariables, SubtractCashProps<TChildProps>>(SubtractCashDocument, {
+      alias: 'subtractCash',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useSubtractCashMutation__
+ *
+ * To run a mutation, you first call `useSubtractCashMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubtractCashMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subtractCashMutation, { data, loading, error }] = useSubtractCashMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      amount: // value for 'amount'
+ *   },
+ * });
+ */
+export function useSubtractCashMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SubtractCashMutation, SubtractCashMutationVariables>) {
+        return ApolloReactHooks.useMutation<SubtractCashMutation, SubtractCashMutationVariables>(SubtractCashDocument, baseOptions);
+      }
+export type SubtractCashMutationHookResult = ReturnType<typeof useSubtractCashMutation>;
+export type SubtractCashMutationResult = ApolloReactCommon.MutationResult<SubtractCashMutation>;
+export type SubtractCashMutationOptions = ApolloReactCommon.BaseMutationOptions<SubtractCashMutation, SubtractCashMutationVariables>;
+export const AddIncomeDocument = gql`
+    mutation addIncome($id: String!, $amount: Float!, $description: String!, $date: DateTime!) {
+  addIncome(id: $id, amount: $amount, description: $description, date: $date)
+}
+    `;
+export type AddIncomeMutationFn = ApolloReactCommon.MutationFunction<AddIncomeMutation, AddIncomeMutationVariables>;
+export type AddIncomeComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddIncomeMutation, AddIncomeMutationVariables>, 'mutation'>;
+
+    export const AddIncomeComponent = (props: AddIncomeComponentProps) => (
+      <ApolloReactComponents.Mutation<AddIncomeMutation, AddIncomeMutationVariables> mutation={AddIncomeDocument} {...props} />
+    );
+    
+export type AddIncomeProps<TChildProps = {}> = ApolloReactHoc.MutateProps<AddIncomeMutation, AddIncomeMutationVariables> & TChildProps;
+export function withAddIncome<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AddIncomeMutation,
+  AddIncomeMutationVariables,
+  AddIncomeProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, AddIncomeMutation, AddIncomeMutationVariables, AddIncomeProps<TChildProps>>(AddIncomeDocument, {
+      alias: 'addIncome',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useAddIncomeMutation__
+ *
+ * To run a mutation, you first call `useAddIncomeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddIncomeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addIncomeMutation, { data, loading, error }] = useAddIncomeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      amount: // value for 'amount'
+ *      description: // value for 'description'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useAddIncomeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddIncomeMutation, AddIncomeMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddIncomeMutation, AddIncomeMutationVariables>(AddIncomeDocument, baseOptions);
+      }
+export type AddIncomeMutationHookResult = ReturnType<typeof useAddIncomeMutation>;
+export type AddIncomeMutationResult = ApolloReactCommon.MutationResult<AddIncomeMutation>;
+export type AddIncomeMutationOptions = ApolloReactCommon.BaseMutationOptions<AddIncomeMutation, AddIncomeMutationVariables>;
+export const AddExpenseDocument = gql`
+    mutation addExpense($id: String!, $amount: Float!, $description: String!, $date: DateTime!) {
+  addExpense(id: $id, amount: $amount, description: $description, date: $date)
+}
+    `;
+export type AddExpenseMutationFn = ApolloReactCommon.MutationFunction<AddExpenseMutation, AddExpenseMutationVariables>;
+export type AddExpenseComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddExpenseMutation, AddExpenseMutationVariables>, 'mutation'>;
+
+    export const AddExpenseComponent = (props: AddExpenseComponentProps) => (
+      <ApolloReactComponents.Mutation<AddExpenseMutation, AddExpenseMutationVariables> mutation={AddExpenseDocument} {...props} />
+    );
+    
+export type AddExpenseProps<TChildProps = {}> = ApolloReactHoc.MutateProps<AddExpenseMutation, AddExpenseMutationVariables> & TChildProps;
+export function withAddExpense<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AddExpenseMutation,
+  AddExpenseMutationVariables,
+  AddExpenseProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, AddExpenseMutation, AddExpenseMutationVariables, AddExpenseProps<TChildProps>>(AddExpenseDocument, {
+      alias: 'addExpense',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useAddExpenseMutation__
+ *
+ * To run a mutation, you first call `useAddExpenseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddExpenseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addExpenseMutation, { data, loading, error }] = useAddExpenseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      amount: // value for 'amount'
+ *      description: // value for 'description'
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useAddExpenseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddExpenseMutation, AddExpenseMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddExpenseMutation, AddExpenseMutationVariables>(AddExpenseDocument, baseOptions);
+      }
+export type AddExpenseMutationHookResult = ReturnType<typeof useAddExpenseMutation>;
+export type AddExpenseMutationResult = ApolloReactCommon.MutationResult<AddExpenseMutation>;
+export type AddExpenseMutationOptions = ApolloReactCommon.BaseMutationOptions<AddExpenseMutation, AddExpenseMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: AuthInput!) {
   login(input: $input) {
@@ -430,6 +719,61 @@ export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptio
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
+export const MoneyFlowDocument = gql`
+    query moneyFlow($id: String!) {
+  all(id: $id) {
+    amount
+    id
+    description
+    date
+    type
+    bankName
+  }
+}
+    `;
+export type MoneyFlowComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<MoneyFlowQuery, MoneyFlowQueryVariables>, 'query'> & ({ variables: MoneyFlowQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const MoneyFlowComponent = (props: MoneyFlowComponentProps) => (
+      <ApolloReactComponents.Query<MoneyFlowQuery, MoneyFlowQueryVariables> query={MoneyFlowDocument} {...props} />
+    );
+    
+export type MoneyFlowProps<TChildProps = {}> = ApolloReactHoc.DataProps<MoneyFlowQuery, MoneyFlowQueryVariables> & TChildProps;
+export function withMoneyFlow<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  MoneyFlowQuery,
+  MoneyFlowQueryVariables,
+  MoneyFlowProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, MoneyFlowQuery, MoneyFlowQueryVariables, MoneyFlowProps<TChildProps>>(MoneyFlowDocument, {
+      alias: 'moneyFlow',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useMoneyFlowQuery__
+ *
+ * To run a query within a React component, call `useMoneyFlowQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMoneyFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMoneyFlowQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMoneyFlowQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MoneyFlowQuery, MoneyFlowQueryVariables>) {
+        return ApolloReactHooks.useQuery<MoneyFlowQuery, MoneyFlowQueryVariables>(MoneyFlowDocument, baseOptions);
+      }
+export function useMoneyFlowLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MoneyFlowQuery, MoneyFlowQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MoneyFlowQuery, MoneyFlowQueryVariables>(MoneyFlowDocument, baseOptions);
+        }
+export type MoneyFlowQueryHookResult = ReturnType<typeof useMoneyFlowQuery>;
+export type MoneyFlowLazyQueryHookResult = ReturnType<typeof useMoneyFlowLazyQuery>;
+export type MoneyFlowQueryResult = ApolloReactCommon.QueryResult<MoneyFlowQuery, MoneyFlowQueryVariables>;
 export const OverviewDocument = gql`
     query overview($id: String!) {
   user(id: $id) {

@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography } from "@material-ui/core";
 
-import { CircularProgress } from "@material-ui/core";
 import React from "react";
+import Skeleton from "@material-ui/lab/Skeleton";
 import { makeStyles } from "@material-ui/core";
 import { useAuth } from "common/AuthContent";
 import { useOverviewQuery } from "generated/apolloComponents";
@@ -17,13 +17,19 @@ const useStyles = makeStyles(theme => ({
 }));
 export const Budget = () => {
   const { user }: any = useAuth();
-  const { loading, data } = useOverviewQuery({
+  const { loading, data, startPolling } = useOverviewQuery({
     variables: { id: user }
   });
   const classes = useStyles();
-
+  let moneyFromAllAccounts;
+  if (data && data.user && data.user.bankAccounts) {
+    moneyFromAllAccounts = data.user.bankAccounts.reduce((acc, value) => {
+      return acc + value.moneyAmount;
+    }, 0);
+    startPolling(5000);
+  }
   return loading ? (
-    <CircularProgress />
+    <Skeleton variant="rect" width={550} height={180} />
   ) : (
     <Card className={classes.paper}>
       <CardContent>
@@ -34,11 +40,7 @@ export const Budget = () => {
           {data && `Cash: ${data.user.cash} PLN`}
         </Typography>
         <Typography className={classes.typoMargin}>
-          {data &&
-            data.user &&
-            data.user.bankAccounts &&
-            data.user.bankAccounts[0] &&
-            `Account: ${data.user.bankAccounts[0].moneyAmount} PLN`}
+          {`Accounts: ${moneyFromAllAccounts ? moneyFromAllAccounts : "0"}`}
         </Typography>
       </CardContent>
     </Card>
