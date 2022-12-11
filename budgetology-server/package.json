@@ -20,7 +20,7 @@
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.11.0",
     "connect-sqlite3": "^0.9.11",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.0",
     "faker": "^4.1.0",
     "graphql": "^14.5.8",
